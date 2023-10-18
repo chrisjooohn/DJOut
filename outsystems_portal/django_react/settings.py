@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'outsystems_portal.urls'
+ROOT_URLCONF = 'django_react.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'outsystems_portal.wsgi.application'
+WSGI_APPLICATION = 'django_react.wsgi.application'
 
 
 # Database
