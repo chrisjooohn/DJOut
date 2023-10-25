@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'portal.apps.PortalConfig',
-    'rest_framework'
+    'rest_framework',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
@@ -78,8 +79,12 @@ WSGI_APPLICATION = 'django_react.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',						
+        'NAME': 'ba_portal',						
+        'USER': 'root',						
+        'PASSWORD': 'Cjavila@24',						
+        'HOST': 'localhost',						
+        'PORT': '3306',	
     }
 }
 
