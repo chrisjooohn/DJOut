@@ -5,8 +5,8 @@ from django.db import connection
 from .query import queryForInit
 
 def save(request):
-    title = request.POST.get('title')
-    desc = request.POST.get('desc')
+    title = request.POST.get('titleAdd')
+    desc = request.POST.get('descAdd')
 
     portabl_tbl = PORTAL_TBL()
     now = datetime.now()

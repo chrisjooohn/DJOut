@@ -32,32 +32,135 @@
 
 </head>
 <script>
-  window.onload = function() {
-      var titleC = document.getElementById("titleCard");
-      var descC = document.getElementById("descCard");
-      var titleP = document.getElementById("titleP");
-      var longData = document.getElementById('myInput').value;
-
-      if(titleP.textContent.trim() === '') {
-        titleC.style.display = 'none'
-      }
-      if(longData.value.trim() === '') {
-        descC.style.display = 'none'
-      }
-      
-  };
   
-  function setValue(title) {
+  function setValue(title, element) {
+    var longData = element.getAttribute('data-long-data');
     var titleC = document.getElementById("titleCard");
     var descC = document.getElementById("descCard");
+    var addC = document.getElementById('addCard');
     var titleP = document.getElementById("titleP");
-    var longData = document.getElementById('myInput').value;
     titleP.textContent = title;
     titleC.style.display = 'block'
     descP.innerHTML  = longData;
     descC.style.display = 'block'
+    addC.style.display = 'none'
   }
 
+  function showAddCard() {
+    
+    var titleC = document.getElementById("titleCard");
+    var descC = document.getElementById("descCard");
+    var addC = document.getElementById('addCard');
+    var editor = tinymce.get('descAdd');
+    titleC.style.display = 'none'
+    descC.style.display = 'none'
+    addC.style.display = 'block';
+
+    if (editor) {
+      editor.remove();
+    }
+
+    // Reinitialize TinyMCE
+    const useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isSmallScreen = window.matchMedia('(max-width: 1023.5px)').matches;
+
+    tinymce.init({
+      selector: 'textarea.tinymce-editor',
+      plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+      editimage_cors_hosts: ['picsum.photos'],
+      menubar: 'file edit view insert format tools table help',
+      toolbar: 'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+      toolbar_sticky: true,
+      toolbar_sticky_offset: isSmallScreen ? 102 : 108,
+      autosave_ask_before_unload: true,
+      autosave_interval: '30s',
+      autosave_prefix: '{path}{query}-{id}-',
+      autosave_restore_when_empty: false,
+      autosave_retention: '2m',
+      image_advtab: true,
+      link_list: [{
+          title: 'My page 1',
+          value: 'https://www.tiny.cloud'
+        },
+        {
+          title: 'My page 2',
+          value: 'http://www.moxiecode.com'
+        }
+      ],
+      image_list: [{
+          title: 'My page 1',
+          value: 'https://www.tiny.cloud'
+        },
+        {
+          title: 'My page 2',
+          value: 'http://www.moxiecode.com'
+        }
+      ],
+      image_class_list: [{
+          title: 'None',
+          value: ''
+        },
+        {
+          title: 'Some class',
+          value: 'class-name'
+        }
+      ],
+      importcss_append: true,
+      file_picker_callback: (callback, value, meta) => {
+        /* Provide file and text for the link dialog */
+        if (meta.filetype === 'file') {
+          callback('https://www.google.com/logos/google.jpg', {
+            text: 'My text'
+          });
+        }
+
+        /* Provide image and alt text for the image dialog */
+        if (meta.filetype === 'image') {
+          callback('https://www.google.com/logos/google.jpg', {
+            alt: 'My alt text'
+          });
+        }
+
+        /* Provide alternative source and posted for the media dialog */
+        if (meta.filetype === 'media') {
+          callback('movie.mp4', {
+            source2: 'alt.ogg',
+            poster: 'https://www.google.com/logos/google.jpg'
+          });
+        }
+      },
+      templates: [{
+          title: 'New Table',
+          description: 'creates a new table',
+          content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"> </th></tr><tr><td> </td><td> </td></tr></table></div>'
+        },
+        {
+          title: 'Starting my story',
+          description: 'A cure for writers block',
+          content: 'Once upon a time...'
+        },
+        {
+          title: 'New list with dates',
+          description: 'New List with dates',
+          content: '<div class="mceTmpl"><span class="cdate">cdate</span><br><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>'
+        }
+      ],
+      template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
+      template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
+      height: 600,
+      image_caption: true,
+      quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+      noneditable_class: 'mceNonEditable',
+      toolbar_mode: 'sliding',
+      contextmenu: 'link image table',
+      skin: useDarkMode ? 'oxide-dark' : 'oxide',
+      content_css: useDarkMode ? 'dark' : 'default',
+      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+    });
+    
+
+    
+  }
 </script>
 
 <body>
@@ -67,7 +170,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="/outsystems" class="logo d-flex align-items-center">
-        <img src="assets/img/logo.png" alt="">
+        <!-- <img src="assets/img/logo.png" alt=""> -->
         <span class="d-none d-lg-block">Outsystems Portal</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -110,9 +213,8 @@
           {% if recordList %}
             {% for results in recordList %}
               <li>
-                <a href="#" onclick="setValue(' {{ results.1 }}');">
+                <a href="#" data-long-data="{{ results.2 }}" onclick="setValue(' {{ results.1 }}', this);">
                   <i class="bi bi-circle"></i><span>{{ results.1 }}</span>
-                  <input type="hidden" id="myInput" value="{{results.2}}">
                 </a>
               </li>
               {% endfor %}  
@@ -128,7 +230,7 @@
         </a>
       </li><!-- End Home Nav -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="add-form">
+        <a class="nav-link collapsed" href="#" onclick="showAddCard()">
           <i class="bi bi-database-add"></i>
           <span>Add</span>
         </a>
@@ -151,12 +253,11 @@
 
     <section class="section dashboard">
       <div class="row">
-
         <!-- Left side columns -->
         <div class="col-lg-12">
           <div class="row">
-            <!-- Reports -->
-            <div class="col-12" id="titleCard">
+            <!-- Title -->
+            <div class="col-12" id="titleCard" style="display: none;">
               <div class="card">
                 <div class="card-body">
                 </br>
@@ -164,17 +265,47 @@
                 </div>
 
               </div>
-            </div><!-- End Reports -->
-            <!-- Top Selling -->
-            <div class="col-12" id="descCard">
+            </div><!-- End Title -->
+            <!-- Description -->
+            <div class="col-12" id="descCard" style="display: none;">
               <div class="card" style="height: auto;">
                 <div class="card-body" >
                   <div id="descP"></div>
                 </div>
 
               </div>
-            </div><!-- End Top Selling -->
-
+            </div><!-- End Description -->
+            <!-- Horizontal Form -->
+            <div id="addCard" style="display: none;">
+              <form  action="{% url 'portal:saveRecord' %}" method="post" >
+                {% csrf_token %}
+                <div class="col-lg-12" >
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Title</h5>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="titleAdd" name="titleAdd">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Description</h5>
+                      <!-- TinyMCE Editor -->
+                      <textarea id="descAdd" name="descAdd" class="tinymce-editor" >
+                      </textarea><!-- End TinyMCE Editor -->
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <input class="btn btn-primary" type="submit" value="Submit">
+                  <!-- <button type="submit" class="btn btn-primary">Save</button> -->
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+              </form><!-- End Horizontal Form -->
+            </div>
           </div>
         </div><!-- End Left side columns -->
 
@@ -191,6 +322,8 @@
 
   <!-- Vendor JS Files -->
   <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/tinymce/tinymce.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
 
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main-portal.js' %}"></script>
