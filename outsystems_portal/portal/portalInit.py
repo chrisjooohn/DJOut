@@ -1,3 +1,7 @@
+"""
+@author: chris.john.avila@shi-g.com
+
+"""
 from django.shortcuts import redirect, render
 from django.db import connection
 from .query import queryForInit

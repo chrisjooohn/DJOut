@@ -1,4 +1,7 @@
+"""
+@author: chris.john.avila@shi-g.com
 
+"""
 def queryForInit():
 
     sqlQuery = f'''

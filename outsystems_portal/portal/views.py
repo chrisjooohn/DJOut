@@ -10,9 +10,6 @@ def main(request):
 def outsystems(request):  
     return render(request, "template/outsystems-portal.html")
 
-def addform(request):  
-    return render(request, "template/add-form.html")
-
 def saveRecord(request):    
     return save(request)  
 
