@@ -4,14 +4,32 @@
 """
 from django.shortcuts import redirect, render
 from django.db import connection
-from .query import queryForInit
+from .query import queryForInit, queryForCdCtgry
 
 def init(request):
-    print('>>>>>>>>>>>>>>>>>>>>>>>123')
+    # Query for IDE record list
     with connection.cursor() as cursor:
-        cursor.execute(queryForInit())
-        records = cursor.fetchall()
+        cursor.execute(queryForInit('IDE'))
+        ideRecords = cursor.fetchall()
+
+    # Query for Widget record list
+    with connection.cursor() as cursor:
+        cursor.execute(queryForInit('Widget'))
+        widgetRecords = cursor.fetchall()
+
+    # Query for How to record list
+    with connection.cursor() as cursor:
+        cursor.execute(queryForInit('Howto'))
+        howToRecords = cursor.fetchall()
+    
+    # Query for Category list
+    with connection.cursor() as cursor:
+        cursor.execute(queryForCdCtgry())
+        categoryRecords = cursor.fetchall()
 
     return render(request, 'template/outsystems-portal.html', {
-        "recordList" : records,
+        "ideRecordList" : ideRecords,
+        "widgetRecordList" : widgetRecords,
+        "howToRecordList" : howToRecords,
+        "categoryList" : categoryRecords,
     })

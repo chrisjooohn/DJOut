@@ -48,17 +48,21 @@
     var hiddenId = document.getElementById("hiddenId").value;
     var hiddenTitle = document.getElementById("hiddenTitle").value;
     var hiddenDesc = document.getElementById("hiddenDesc").value;
+    var hiddenCtgry = document.getElementById("hiddenCtgry").value;
     var titleAdd =  document.getElementById("titleAdd");
+    var categoryAdd =  document.getElementById("categoryAdd");
     var process = document.getElementById('process');
     var idVal = document.getElementById('idVal');
     process.value = "Edit"
     idVal.value = hiddenId;
     titleAdd.value = hiddenTitle;
+    categoryAdd.value = hiddenCtgry
     initEditor(hiddenDesc);
     
   }
   
-  function setValue(id, title, element) {
+  function setValue(id, title, element, ctgry) {
+    
     // Set form value
     var longData = element.getAttribute('data-long-data');
     var titleC = document.getElementById("titleCard");
@@ -78,9 +82,11 @@
     var hiddenId = document.getElementById("hiddenId");
     var hiddenTitle = document.getElementById("hiddenTitle");
     var hiddenDesc = document.getElementById("hiddenDesc");
+    var hiddenCtgry = document.getElementById("hiddenCtgry");
     hiddenId.value = id;
     hiddenTitle.value = title;
     hiddenDesc.value  = longData;
+    hiddenCtgry.value = ctgry;
     
   }
 
@@ -252,25 +258,59 @@
 
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
-
+    
     <ul class="sidebar-nav" id="sidebar-nav">
-
+      <li class="nav-heading">Category</li>
       <li class="nav-item" style="white-space: nowrap;overflow-x: auto;">
-        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Category</span><i class="bi bi-chevron-down ms-auto"></i>
+        <a class="nav-link collapsed" data-bs-target="#ide-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-record-circle"></i><span>IDE</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav" style="max-height: 500px;overflow-y: auto;">
-          {% if recordList %}
-            {% for results in recordList %}
+        <ul id="ide-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav" style="max-height: 500px;overflow-y: auto;">
+          {% if ideRecordList %}
+            {% for results in ideRecordList %}
               <li>
-                <a href="#" data-long-data="{{ results.2 }}" onclick="setValue(' {{ results.0 }}',' {{ results.1 }}', this);">
+                <a href="#" data-long-data="{{ results.2 }}" onclick="setValue(' {{ results.0 }}',' {{ results.1 }}', this, '{{ results.3 }}');">
                   <i class="bi bi-circle"></i><span>{{ results.1 }}</span>
                 </a>
               </li>
               {% endfor %}  
           {% endif %}
         </ul>
-      </li><!-- End Components Nav -->
+      </li><!-- End IDE Nav -->
+
+      <li class="nav-item" style="white-space: nowrap;overflow-x: auto;">
+        <a class="nav-link collapsed" data-bs-target="#widget-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Widget</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="widget-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav" style="max-height: 500px;overflow-y: auto;">
+          {% if widgetRecordList %}
+            {% for results in widgetRecordList %}
+              <li>
+                <a href="#" data-long-data="{{ results.2 }}" onclick="setValue(' {{ results.0 }}',' {{ results.1 }}', this, '{{ results.3 }}');">
+                  <i class="bi bi-circle"></i><span>{{ results.1 }}</span>
+                </a>
+              </li>
+              {% endfor %}  
+          {% endif %}
+        </ul>
+      </li><!-- End Widget Nav -->
+
+      <li class="nav-item" style="white-space: nowrap;overflow-x: auto;">
+        <a class="nav-link collapsed" data-bs-target="#howto-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-question-square"></i><span>How to</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="howto-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav" style="max-height: 500px;overflow-y: auto;">
+          {% if howToRecordList %}
+            {% for results in howToRecordList %}
+              <li>
+                <a href="#" data-long-data="{{ results.2 }}" onclick="setValue(' {{ results.0 }}',' {{ results.1 }}', this, '{{ results.3 }}');">
+                  <i class="bi bi-circle"></i><span>{{ results.1 }}</span>
+                </a>
+              </li>
+              {% endfor %}  
+          {% endif %}
+        </ul>
+      </li><!-- End How to Nav -->
 
       <li class="nav-heading">Actions</li>
       <li class="nav-item">
@@ -310,6 +350,7 @@
           <input type="hidden" id="hiddenId" name="hiddenId">
           <input type="hidden" id="hiddenTitle" name="hiddenTitle">
           <input type="hidden" id="hiddenDesc" name="hiddenDesc">
+          <input type="hidden" id="hiddenCtgry" name="hiddenCtgry">
           <button type="button" onclick="editData()" class="btn btn-primary" >Edit</button>
         
       </div>
@@ -347,8 +388,24 @@
                   <div class="card">
                     <div class="card-body">
                       <h5 class="card-title">Title</h5>
-                      <div class="col-sm-10">
+                      <div class="col-sm-6">
                         <input type="text"  class="form-control" id="titleAdd" name="titleAdd">
+                      </div>
+                      <h5 class="card-title">Category</h5>
+                      <div class="col-sm-6">
+                        <select class="form-select" id="categoryAdd" name="categoryAdd" aria-label="Default select example">
+                          <option selected></option>
+                          {% if categoryList %}
+                            {% for results in categoryList %}
+                              <option value={{ results.0 }}
+                              {% if results.0 == categoryAdd %}
+                                selected
+                              {% endif %}>
+                                {{ results.0 }}
+                              </option>
+                            {% endfor %}            
+                          {% endif %}
+                        </select>
                       </div>
                     </div>
                   </div>
