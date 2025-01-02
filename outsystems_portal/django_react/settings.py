@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'ba_portal',						
         'USER': 'ba_portal',						
         'PASSWORD': 'ba_portal',						
-        'HOST': '10.2.1.166',						
+        'HOST': '10.2.1.165',						
         'PORT': '3306',	
     }
 }
